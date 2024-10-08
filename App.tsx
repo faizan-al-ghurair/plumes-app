@@ -16,48 +16,18 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {WebView} from 'react-native-webview';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
+const Colors = {
+  white: '#FFFFFF',
+  light: '#FFFFFF',
+  lighter: '#FFFFFF',
+  black: '#000000',
+  darker: '#000000',
+};
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
+  const isDarkMode = useColorScheme() === 'light';
+  // const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -68,30 +38,15 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+      <View style={styles.container}>
+        <WebView
+          source={{uri: 'https://www.theplumes.ae'}}
+          style={styles.webview}
+          onLoad={() => console.log('Page loaded')}
+          onError={error => console.log('Error loading page', error)}
+          startInLoadingState={true}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -112,6 +67,16 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  container: {
+    backgroundColor: 'red',
+    width: '100%',
+    height: '100%',
+    // flex: 1,
+  },
+  webview: {
+    width: '100%',
+    height: '100%',
   },
 });
 
