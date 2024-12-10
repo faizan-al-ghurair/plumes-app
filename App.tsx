@@ -5,79 +5,37 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import {WebView} from 'react-native-webview';
+import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import HomeScreen from './src/routes/Home';
+import Profile from './src/routes/Profile';
+import {Button} from 'react-native';
 
-const Colors = {
-  white: '#FFFFFF',
-  light: '#FFFFFF',
-  lighter: '#FFFFFF',
-  black: '#000000',
-  darker: '#000000',
-};
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'light';
-  // const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+  const Tab = createBottomTabNavigator();
+  const [tabState, setTabState] = useState('none');
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <View style={styles.container}>
-        <WebView
-          source={{uri: 'https://www.theplumes.ae'}}
-          style={styles.webview}
-          onLoad={() => console.log('Page loaded')}
-          onError={error => console.log('Error loading page', error)}
-          startInLoadingState={true}
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false, // This removes the header for all tabs
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          setTabState={setTabState}
         />
-      </View>
-    </SafeAreaView>
+        <Tab.Screen
+          name="Settings"
+          component={Profile}
+          options={{
+            tabBarStyle: {display: tabState}, // Hides the tab bar for this screen
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  container: {
-    backgroundColor: 'red',
-    width: '100%',
-    height: '100%',
-    // flex: 1,
-  },
-  webview: {
-    width: '100%',
-    height: '100%',
-  },
-});
 
 export default App;
